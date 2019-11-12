@@ -1,0 +1,44 @@
+html {
+  box-sizing: border-box;
+}
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+}
+
+header h1 {
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: auto;
+  width: 80vw;
+}
+
+.score-panel {
+  display: flex;
+  width: 20vw;
+  margin: auto;
+  justify-content: space-between;
+}
+
+.stars {
+  display: flex;
+  list-style: none;
+  padding-left: 0;
+}
+
+.deck {
+  border: 2px solid lightgray;
+  border-radius: 3px;
+}
