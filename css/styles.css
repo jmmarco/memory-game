@@ -11,6 +11,7 @@ html, body {
 
 body {
   font-family: 'Raleway', sans-serif;
+  background-image: url('../img/ripples.png');
 }
 
 header h1 {
@@ -22,7 +23,7 @@ header h1 {
   flex-direction: column;
   justify-content: center;
   margin: auto;
-  width: 80vw;
+  padding: 20px 0;
 }
 
 .score-panel {
@@ -39,6 +40,14 @@ header h1 {
   padding-left: 0;
 }
 
+.score-panel .fas {
+  font-size: 2rem;
+}
+
+.timer {
+  font-size: 2.5rem;
+}
+
 #deck {
   width: 660px;
   display: flex;
@@ -46,10 +55,12 @@ header h1 {
   justify-content: space-between;
   align-items: center;
   border: 2px solid lightgray;
-  border-radius: 3px;
+  border-radius: 8px;
   padding: 32px;
   list-style: none;
   margin: auto;
+  /* background: linear-gradient(to right, #f7b733, #fc4a1a); W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(90deg, rgba(154,70,210,1) 0%, rgba(253,234,29,0.9654236694677871) 67%, rgba(245,161,44,1) 100%);
 }
 
 #deck li {
@@ -61,18 +72,44 @@ header h1 {
   border-radius: 6px;
 }
 
+#deck .card.hide {
+  transform: rotateY(-180deg);
+  cursor: default;
+  transition: all 0.3s;
+}
+
+#deck .card.open {
+  /* transform: rotateY(180deg); */
+  transform: rotateY(180deg);
+  background: orange;
+  cursor: default;
+  transition: all 0.5s;
+}
+
+#deck .card>i {
+  transform: rotateY(180deg);
+  color: white;
+}
+
+#deck .card.open.match {
+  background: limegreen;
+}
+
+
 .card {
   width: 125px;
   height: 125px;
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
+  font-size: 0;
 }
 
-
-.timer p {
-  font-size: 36px;
+#deck .card.show {
+  font-size: 3rem;  
 }
+
 
 .restart {
   display: flex;
@@ -80,9 +117,47 @@ header h1 {
 }
 
 /* CSS rules for the standard material design sizing guidelines: */
+.material-icons.md-0 { font-size:  0; }
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
 .material-icons.md-60 { font-size: 60px; }
 .material-icons.md-72 { font-size: 72px; }
+
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+@keyframes flipInX {
+  from {
+    transform: perspective(400px) rotate3d(1, 0, 0, 90deg);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -20deg);
+    animation-timing-function: ease-in;
+  }
+
+  60% {
+    transform: perspective(400px) rotate3d(1, 0, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: perspective(400px) rotate3d(1, 0, 0, -5deg);
+  }
+
+  to {
+    transform: perspective(400px);
+  }
+}
+
+.flipInX {
+  backface-visibility: visible !important;
+  animation-name: flipInX;
+}
+
