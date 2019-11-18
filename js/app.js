@@ -11,8 +11,10 @@
   const i = document.createElement('i')
   const div = document.createElement('div')
 
+  const shuffledIcons = shuffle(icons)
 
-  icons.concat(icons).forEach(icon => {
+
+  shuffledIcons.concat(shuffledIcons).forEach(icon => {
     let li = document.createElement('li')
     li.classList.add('card')
     document.createElement('div')
@@ -38,6 +40,33 @@
     }
 
   }
+
+  // Non-mutating Fisher-Yates Algorithm Shuffle https://bost.ocks.org/mike/shuffle/
+  function shuffle(array) {
+    const shuffledArray = [...array]
+    let m = shuffledArray.length, t, i
+    while (m) {
+      i = Math.floor(Math.random() * m--)
+      t = shuffledArray[m];
+      shuffledArray[m] = shuffledArray[i];
+      shuffledArray[i] = t;
+    }
+
+    return shuffledArray
+  }
+
+  // function shuffleArray(array) {
+  //   const shuffledArray = array.slice()
+  //   for (let i = shuffledArray.length - 1; i > 0; i--) {
+  //       const j = Math.floor(Math.random() * (i + 1));
+  //       [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+  //   }
+  //   return shuffledArray
+  // }
+
+  // console.log(shuffleArray(icons))
+
+
 
   function handleClick(e) {
     let card = e.target
