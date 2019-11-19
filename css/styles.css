@@ -28,9 +28,10 @@ header h1 {
 
 .score-panel {
   display: flex;
-  width: 40vw;
+  width: 660px;
   justify-content: space-around;
   margin: auto;
+  align-items: center;
 }
 
 .stars {
@@ -40,12 +41,13 @@ header h1 {
   padding-left: 0;
 }
 
-.score-panel .fas {
+.score-panel .fa-star {
   font-size: 2rem;
 }
 
-.timer {
-  font-size: 2.5rem;
+.timer-display, .moves-display {
+  font-size: 2rem;
+  /* width: 250px; */
 }
 
 #deck {
@@ -93,6 +95,10 @@ header h1 {
 
 #deck .card.open.match {
   background: limegreen;
+}
+
+.timer {
+  width: 160px;
 }
 
 
