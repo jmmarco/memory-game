@@ -2,27 +2,32 @@
 
   'use strict'
 
+  // Capture necessary DOM nodes
   const deck = document.getElementById('deck')
-  const icons = ['fa-apple', 'fa-aviato', 'fa-aws', 'fa-android', 'fa-react', 'fa-angular', 'fa-vuejs', 'fa-airbnb']
+  const restartBtn = document.querySelector('.restart')
   let stopWatchEl = document.getElementById('stopwatch')
   let movesEl = document.getElementById('moves')
   let starIcons = document.getElementsByClassName('fa-star')
-  const restartBtn = document.querySelector('.restart')
+  const modalEl = document.querySelector('.modal')
+
+
+  // Helper variables 
+  const icons = ['fa-apple', 'fa-aviato', 'fa-aws', 'fa-android', 'fa-react', 'fa-angular', 'fa-vuejs', 'fa-airbnb']
   let pairOfcards = []
-
-  // Create elements
-
-  const li = document.createElement('li')
-  const i = document.createElement('i')
-  const div = document.createElement('div')
-
-  const shuffledIcons = shuffle(icons.concat(icons))
-
   let timerId = null
   let pairs = icons.length
   let moves = 0
 
+  // Create necessary node elements
+  const li = document.createElement('li')
+  const i = document.createElement('i')
+  const div = document.createElement('div')
 
+  // Duplicate icon array and shuffle
+  const shuffledIcons = shuffle(icons.concat(icons))
+
+
+  // Clear children of a parent DOM node
   function clearNodes(element) {
     while (element.firstChild) {
       element.removeChild(element.firstChild);
@@ -30,11 +35,11 @@
   }
 
 
+  // Inintialize the game
   function initGame() {
-
+    console.log('fired initGame')
     stopWatch(false)
     clearNodes(deck)
-
     shuffledIcons.forEach(icon => {
       let li = document.createElement('li')
       li.classList.add('card')
@@ -53,6 +58,7 @@
   }
 
 
+  // Check pair of cards for match
   function checkPair(cards) {
     if (cards[0].firstChild.classList.value === cards[1].firstChild.classList.value) {
       cards[0].classList.add('match')
@@ -65,7 +71,6 @@
       }, 500)
       return false
     }
-
   }
 
   // Non-mutating Fisher-Yates Algorithm Shuffle https://bost.ocks.org/mike/shuffle/
@@ -82,13 +87,8 @@
     return arrayToShuffle
   }
 
-
+  // Custom stop watch
   function stopWatch(command, stopWatchEl) {
-
-    /* 
-      command: 'on' or 'off'
-      stopWatchEl: the destination HTML node
-    */
 
     let clock = {
       h: 0, m: 0, s: 0, display: null
@@ -129,13 +129,10 @@
   }
 
 
-
+  // Handle each card click
   function handleClick(e) {
 
-    console.log('target is: ', e.target)
-
     let card = e.target
-
 
     if (!timerId) {
       timerId = stopWatch(true, stopWatchEl)
@@ -158,7 +155,6 @@
 
 
   function countMatch(outcome) {
-    console.log('inside countMatch', outcome)
     moves++
     if (outcome) {
       pairs--
@@ -170,7 +166,7 @@
   function checkWin(pairs) {
     if (pairs === 0) {
       stopWatch(false, stopWatchEl)
-      launchModal()
+      launchModal(modalEl)
     }
   }
 
@@ -193,23 +189,33 @@
     }
   }
 
-
-
-  function launchModal() {
-    document.querySelector('.modal').classList.toggle('hidden')
-    document.querySelector('.container').classList.toggle('fade')
-    const modalTime = document.getElementById('modal-time')
-    const modalMoves = document.getElementById('modal-moves')
-
-    const scorePanelMoves = document.getElementById('moves').cloneNode(true)
-    const scorePanelStopWatch = document.getElementById('stopwatch').cloneNode(true)
-    modalTime.appendChild(scorePanelStopWatch)
-    modalMoves.appendChild(scorePanelMoves)
-    document.getElementById('modal-dismiss').addEventListener('click', launchModal)
-    document.getElementById('modal-play-again').addEventListener('click', initGame)
+  function launchModal(modalEl) {
+    if (modalEl.classList.contains('hidden')) {
+      modalEl.classList.toggle('hidden')
+      document.querySelector('.container').classList.toggle('fade')
+      const modalTime = document.getElementById('modal-time')
+      const modalMoves = document.getElementById('modal-moves')
+      const scorePanelMoves = document.getElementById('moves').cloneNode(true)
+      const scorePanelStopWatch = document.getElementById('stopwatch').cloneNode(true)
+      modalTime.appendChild(scorePanelStopWatch)
+      modalMoves.appendChild(scorePanelMoves)
+      document.getElementById('modal-dismiss').addEventListener('click', () => {
+        document.querySelector('.container').classList.toggle('fade')
+        launchModal(modalEl)
+      })
+      document.getElementById('modal-play-again').addEventListener('click', initGame)
+    } else {
+      modalEl.classList.toggle('hidden')
+    }
+  
   }
+
+
+
+
 
 
   initGame()
 })()
+
 
