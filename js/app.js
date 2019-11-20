@@ -4,9 +4,10 @@
 
   const deck = document.getElementById('deck')
   const icons = ['fa-apple', 'fa-aviato', 'fa-aws', 'fa-android', 'fa-react', 'fa-angular', 'fa-vuejs', 'fa-airbnb']
-  const stopWatchEl = document.getElementById('stopwatch')
-  const movesEl = document.getElementById('moves')
+  let stopWatchEl = document.getElementById('stopwatch')
+  let movesEl = document.getElementById('moves')
   let starIcons = document.getElementsByClassName('fa-star')
+  const restartBtn = document.querySelector('.restart')
   let pairOfcards = []
 
   // Create elements
@@ -16,24 +17,40 @@
   const div = document.createElement('div')
 
   const shuffledIcons = shuffle(icons.concat(icons))
-  
+
   let timerId = null
   let pairs = icons.length
   let moves = 0
 
 
-  shuffledIcons.forEach(icon => {
-    let li = document.createElement('li')
-    li.classList.add('card')
-    document.createElement('div')
-    let i = document.createElement('i')
-    i.classList.add('fab')
-    i.classList.add(icon)
-    // li.classList.add('hide')
-    li.appendChild(i)
-    deck.appendChild(li)
-    li.addEventListener('click', handleClick)
-  })
+  function clearNodes(element) {
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+  }
+
+
+  function initGame() {
+
+    stopWatch(false)
+    clearNodes(deck)
+
+    shuffledIcons.forEach(icon => {
+      let li = document.createElement('li')
+      li.classList.add('card')
+      let i = document.createElement('i')
+      i.classList.add('fab')
+      i.classList.add(icon)
+      li.appendChild(i)
+      deck.appendChild(li)
+      li.addEventListener('click', handleClick)
+    })
+
+    movesEl.innerText = '0'
+    stopWatchEl.innerText = '00:00:00'
+
+    restartBtn.addEventListener('click', initGame)
+  }
 
 
   function checkPair(cards) {
@@ -152,8 +169,8 @@
 
   function checkWin(pairs) {
     if (pairs === 0) {
-      alert('you\'ve won')
       stopWatch(false, stopWatchEl)
+      launchModal()
     }
   }
 
@@ -162,7 +179,7 @@
   }
 
   function setRating(stars, moves) {
-    switch(moves) {
+    switch (moves) {
       case 10:
         stars[2].classList.remove('fas')
         stars[2].classList.add('far')
@@ -177,4 +194,22 @@
   }
 
 
+
+  function launchModal() {
+    document.querySelector('.modal').classList.toggle('hidden')
+    document.querySelector('.container').classList.toggle('fade')
+    const modalTime = document.getElementById('modal-time')
+    const modalMoves = document.getElementById('modal-moves')
+
+    const scorePanelMoves = document.getElementById('moves').cloneNode(true)
+    const scorePanelStopWatch = document.getElementById('stopwatch').cloneNode(true)
+    modalTime.appendChild(scorePanelStopWatch)
+    modalMoves.appendChild(scorePanelMoves)
+    document.getElementById('modal-dismiss').addEventListener('click', launchModal)
+    document.getElementById('modal-play-again').addEventListener('click', initGame)
+  }
+
+
+  initGame()
 })()
+
